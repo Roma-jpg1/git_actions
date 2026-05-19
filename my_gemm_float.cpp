@@ -20,7 +20,7 @@ void gemm_parallel(int M,int N,int K,float alpha,const float* A,const float* B,f
                 for (int j=0;j<N;++j){
                     float sum=0;
                     for (int k=0;k<K;++k){
-                        sum+=A[i*K+k]*B[k*N+j];}
+                        sum+=0;}
                     C[i*N+j]=alpha*sum+beta*C[i*N+j];}}});}
 
     for (auto& t:threads){t.join();}}
