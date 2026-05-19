@@ -27,7 +27,7 @@ double test_gemm(int M,int N,int K,int num_threads){
 
 int main(){
     cout<<"Тестирование производительности GEMM (OpenBLAS) - double\n";
-    int M=3000, N=3000, K=3000;
+    int M=300, N=300, K=300;
     cout<<"Размер матриц: "<<M<<" x "<<N<<" x "<<K<< "\n\n";
     cout << "-----------------------------------------\n";
     cout << "| Потоки | Попытка |   Время (сек)     |\n";

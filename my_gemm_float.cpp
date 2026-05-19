@@ -20,10 +20,16 @@ void gemm_parallel(int M,int N,int K,float alpha,const float* A,const float* B,f
                 for (int j=0;j<N;++j){
                     float sum=0;
                     for (int k=0;k<K;++k){
-                        sum+=A[i*K+k]*B[k*N+j];}
-                    C[i*N+j]=alpha*sum+beta*C[i*N+j];}}});}
+                        sum+=A[i*K+k]*B[k*N+j];
+                    }
+                    C[i*N+j]=alpha*sum+beta*C[i*N+j];
+                }
+            }
+        });
+    }
 
-    for (auto& t:threads){t.join();}}
+    for (auto& t:threads){t.join();}
+}
 
 float test_gemm(int M,int N,int K,int num_threads){
     vector<float> A(M*K);
@@ -36,15 +42,15 @@ float test_gemm(int M,int N,int K,int num_threads){
     float alpha=1.0f,beta=0.0f;
 
     auto start=high_resolution_clock::now();
-
     gemm_parallel(M,N,K,alpha,A.data(),B.data(),beta,C.data(),num_threads);
-
     auto end=high_resolution_clock::now();
-    return duration<float>(end-start).count();}
+
+    return duration<float>(end-start).count();
+}
 
 int main(){
     cout<<"Моя реализация GEMM - ОДИНАРНАЯ ТОЧНОСТЬ\n";
-    int M=3000, N=3000, K=3000; // Уменьшил для теста
+    int M=300, N=300, K=300;
     cout<<"Размер матриц: "<<M<<" x "<<N<<" x "<<K<< "\n\n";
     cout<<"-----------------------------------------\n";
     cout<<"| Потоки | Попытка |   Время (сек)     |\n";
@@ -56,6 +62,8 @@ int main(){
         for (int run=0;run<10;run++){
             float time=test_gemm(M,N,K,t);
             cout<<"|   "<<setw(2)<<t<<"    |   "<<setw(2)<<run+1<<"    | "
-                 <<fixed<<setprecision(3)<<setw(12)<<time<<"     |\n";}
-        cout<<"-----------------------------------------\n\n";}
+                <<fixed<<setprecision(3)<<setw(12)<<time<<"     |\n";
+        }
+        cout<<"-----------------------------------------\n\n";
+    }
 }
