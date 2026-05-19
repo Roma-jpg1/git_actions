@@ -9,7 +9,7 @@ using namespace chrono;
 
 void gemm_parallel(int M,int N,int K,float alpha,const float* A,const float* B,float beta,float* C,int num_threads){
     vector<thread> threads;
-    int rows_per_thread=M/num_threads;
+    int rows_per_thread=M/num_threads
 
     for (int t=0;t<num_threads;++t){
         int start_row=t*rows_per_thread;
