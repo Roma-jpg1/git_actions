@@ -1,42 +1,38 @@
-name: CI
+name: ci
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y g++ libopenblas-dev
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ libopenblas-dev
 
-    - name: Compile my GEMM (float)
-      run: g++ -O3 -march=native -pthread my_gemm_float.cpp -o my_gemm_float
+      - name: Build and run OpenBLAS double test
+        run: |
+          g++ -O3 -march=native -fopenmp test_gemm_openblas_double.cpp -o test_gemm_openblas_double -lopenblas -lpthread
+          ./test_gemm_openblas_double
 
-    - name: Compile my GEMM (double)
-      run: g++ -O3 -march=native -pthread my_gemm_double.cpp -o my_gemm_double
+      - name: Build and run OpenBLAS float test
+        run: |
+          g++ -O3 -march=native -fopenmp test_gemm_openblas_float.cpp -o test_gemm_openblas_float -lopenblas -lpthread
+          ./test_gemm_openblas_float
 
-    - name: Run my GEMM float
-      run: ./my_gemm_float
+      - name: Build and run my_gemm double
+        run: |
+          g++ -O3 -march=native -pthread my_gemm_double.cpp -o my_gemm_double
+          ./my_gemm_double
 
-    - name: Run my GEMM double
-      run: ./my_gemm_double
-
-    - name: Compile OpenBLAS test (float)
-      run: g++ -O3 -march=native -fopenmp test_gemm_openblas_float.cpp -o test_gemm_openblas_float -lopenblas -lpthread
-
-    - name: Compile OpenBLAS test (double)
-      run: g++ -O3 -march=native -fopenmp test_gemm_openblas_double.cpp -o test_gemm_openblas_double -lopenblas -lpthread
-
-    - name: Run OpenBLAS float
-      run: ./test_gemm_openblas_float
-
-    - name: Run OpenBLAS double
-      run: ./test_gemm_openblas_double
+      - name: Build and run my_gemm float
+        run: |
+          g++ -O3 -march=native -pthread my_gemm_float.cpp -o my_gemm_float
+          ./my_gemm_float
