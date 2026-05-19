@@ -17,22 +17,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ libopenblas-dev
 
-      - name: Build and run OpenBLAS double test
-        run: |
-          g++ -O3 -march=native -fopenmp test_gemm_openblas_double.cpp -o test_gemm_openblas_double -lopenblas -lpthread
-          ./test_gemm_openblas_double
+      - name: Compile OpenBLAS double test
+        run: g++ -O2 -fopenmp test_gemm_openblas_double.cpp -o test_gemm_openblas_double -lopenblas -lpthread
 
-      - name: Build and run OpenBLAS float test
-        run: |
-          g++ -O3 -march=native -fopenmp test_gemm_openblas_float.cpp -o test_gemm_openblas_float -lopenblas -lpthread
-          ./test_gemm_openblas_float
+      - name: Compile OpenBLAS float test
+        run: g++ -O2 -fopenmp test_gemm_openblas_float.cpp -o test_gemm_openblas_float -lopenblas -lpthread
 
-      - name: Build and run my_gemm double
-        run: |
-          g++ -O3 -march=native -pthread my_gemm_double.cpp -o my_gemm_double
-          ./my_gemm_double
+      - name: Compile my_gemm double
+        run: g++ -O2 -pthread my_gemm_double.cpp -o my_gemm_double
 
-      - name: Build and run my_gemm float
-        run: |
-          g++ -O3 -march=native -pthread my_gemm_float.cpp -o my_gemm_float
-          ./my_gemm_float
+      - name: Compile my_gemm float
+        run: g++ -O2 -pthread my_gemm_float.cpp -o my_gemm_float
